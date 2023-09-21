@@ -1,30 +1,16 @@
-// Create web server
-
-// Import modules
+//create web server
 const express = require('express');
-const router = express.Router();
-const { check, validationResult } = require('express-validator');
+const app = express();
+const port = 3000;
+const path = require('path');
+const bodyParser = require('body-parser');
 
-// Import models
-const Comment = require('../models/Comment');
-const User = require('../models/User');
-const Post = require('../models/Post');
+//connect to database
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/comments', {useNewUrlParser: true, useUnifiedTopology: true});
 
-// Import middleware
-const auth = require('../middleware/auth');
-
-// @route   POST api/comments
-// @desc    Create a comment
-// @access  Private
-router.post(
-    '/',
-    [
-        auth,
-        [
-            check('text', 'Text is required').not().isEmpty(),
-
-            check('post', 'Post is required').not().isEmpty()
-        ]
-
-    ]
-    
+//create schema
+const commentSchema = new mongoose.Schema({
+    name: String,
+    comment: String
+});
